@@ -1,11 +1,14 @@
-name: Hello world!
+name: marketplace-hello-world
+
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  sayHelloWorld:
+  hello-world:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: gr2m/hello-world-js-action@v1.x
+      - name: Run Hello World JS Action
+        uses: actions/hello-world-javascript-action@main
+        with:
+          who-to-greet: "GitHub Actions Student"
