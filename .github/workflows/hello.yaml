@@ -1,17 +1,18 @@
-name: hello-actions
-
-on:
-  push:
-    branches:
-      - main
+name: CI Example
+on: [push]
 
 jobs:
-  hello:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Print hello
-        run: echo "Hello GitHub Actions"
+      # Step 1: Standard Checkout Action
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Print commit sha
-        run: echo $GITHUB_SHA
+      # Step 2: Example Marketplace Action (e.g., HTTP Request)
+      - name: Trigger External API
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://example.com'
+          method: 'POST'
+          data: '{"status": "building"}'
