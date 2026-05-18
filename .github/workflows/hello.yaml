@@ -1,17 +1,11 @@
-name: hello-actions
-
+name: Hello world!
 on:
   push:
     branches:
       - main
 
 jobs:
-  hello:
+  sayHelloWorld:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Print hello
-        run: echo "Hello GitHub Actions"
-
-      - name: Print commit sha
-        run: echo $GITHUB_SHA
+      - uses: gr2m/hello-world-js-action@v1.x
