@@ -1,16 +1,25 @@
-name: marketplace-hello-world
+
+name: trivy-scan
 
 on:
-  push:
   workflow_dispatch:
 
-
 jobs:
-  hello-world:
+  scan:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Run Hello World JS Action
-        uses: actions/hello-world-javascript-action@main
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Trivy CLI
+        uses: ankurk91/install-trivy-cli-action@v2
         with:
-          who-to-greet: "GitHub Actions Student"
+          version: latest
+          cache: true
+
+      - name: Verify Trivy installation
+        run: trivy --version
+
+      - name: Run Trivy filesystem scan
+        run: trivy fs --severity HIGH,CRITICAL --exit-code 1 .
