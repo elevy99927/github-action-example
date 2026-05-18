@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Print hello
-        run: echo "DEV: Hello GitHub Actions"
+        run: echo "Hello GitHub Actions"
 
       - name: Print commit sha
         run: echo $GITHUB_SHA
