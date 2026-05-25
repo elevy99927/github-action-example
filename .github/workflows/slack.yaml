@@ -5,7 +5,22 @@ on:
   workflow_dispatch:
   push:
 
+
 jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "running tests"
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - run: echo "building app"
+
+
   notify:
     runs-on: ubuntu-latest
 
@@ -19,3 +34,4 @@ jobs:
           SLACK_TITLE: GitHub Actions Notification
           SLACK_MESSAGE: "Manual workflow executed successfully"
           SLACK_COLOR: good
+
