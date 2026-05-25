@@ -30,7 +30,7 @@ jobs:
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: elevy99927-alerts
-          SLACK_USERNAME: elevy999
+          SLACK_USERNAME: elevy
           SLACK_TITLE: GitHub Actions Notification
           SLACK_MESSAGE: "Manual workflow executed successfully"
           SLACK_COLOR: good
