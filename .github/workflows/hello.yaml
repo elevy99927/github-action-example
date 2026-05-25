@@ -1,25 +1,12 @@
-
-name: trivy-scan
+name: hello-actions
 
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
-  scan:
-    runs-on: ubuntu-latest
+  hello:
+    runs-on: ubuntu-latest #free tier - 2,000 minutes per month
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Trivy CLI
-        uses: ankurk91/install-trivy-cli-action@v2
-        with:
-          version: latest
-          cache: true
- 
-      - name: Verify Trivy installation
-        run: trivy --version
-
-      - name: Run Trivy filesystem scan
-        run: trivy fs --severity HIGH,CRITICAL --exit-code 1 .
+      - name: Print message
+        run: echo "Hello GitHub Actions"
