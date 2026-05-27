@@ -1,19 +1,15 @@
-name: hello-actions
- 
+name: marketplace-hello-world
+
 on:
   push:
+  workflow_dispatch:
 
 jobs:
-  hello:
-    runs-on: ubuntu-latest #free tier - 2,000 minutes per month
-
-    steps:
-      - name: Print message
-        run: echo "Hello GitHub Actions"
-
-  build:
+  hello-world:
     runs-on: ubuntu-latest
-    needs: hello
+
     steps:
-      - name: do build
-        run: echo "building app"
+      - name: Run Hello World JS Action
+        uses: actions/hello-world-javascript-action@main
+        with:
+          who-to-greet: "GitHub Actions Student"
