@@ -32,6 +32,6 @@ jobs:
           SLACK_CHANNEL: elevy99927-alerts
           SLACK_USERNAME: elevy
           SLACK_TITLE: GitHub Actions Notification
-          SLACK_MESSAGE: "Workflow executed successfully"
+          SLACK_MESSAGE: "Workflow executed successfully on branch: ${{ github.ref_name }}"
           SLACK_COLOR: good
 
