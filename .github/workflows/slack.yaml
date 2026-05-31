@@ -29,8 +29,8 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: elevy99927-alerts
-          SLACK_USERNAME: elevy
+          SLACK_CHANNEL: my-alerts #elevy99927-alerts
+          SLACK_USERNAME: Eyal Levy #elevy
           SLACK_TITLE: GitHub Actions Notification
           SLACK_MESSAGE: "Workflow executed successfully on branch: ${{ github.ref_name }}"
           SLACK_COLOR: good
