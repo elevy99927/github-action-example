@@ -4,7 +4,8 @@ name: slack-notification-demo
 on:
   workflow_dispatch:
   push:
-
+    branches:
+      - slack
 jobs:
   test:
     runs-on: ubuntu-latest
