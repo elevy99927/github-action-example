@@ -1,5 +1,4 @@
 # GitHub Actions GitOps example
-
 A Flask app with Prometheus metrics, built and scanned by [ci.yaml](.github/workflows/ci.yaml).
 
 ![Pipeline](pipeline.png)
