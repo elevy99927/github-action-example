@@ -42,6 +42,14 @@ jobs:
         with:
           sarif_file: semgrep.sarif
 
+      # Uncomment to keep semgrep.sarif as a downloadable file on the run page
+      # - name: Save report
+      #   if: always()
+      #   uses: actions/upload-artifact@v7
+      #   with:
+      #     name: semgrep-report
+      #     path: semgrep.sarif
+
   build:
     needs: [docker-build, semgrep-scan]
     runs-on: ubuntu-latest
