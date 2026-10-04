@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - semgrep
+  workflow_dispatch:
+
+jobs:
+  # docker-build and semgrep-scan run in parallel
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Docker build
+        run: docker build -t app:${{ github.sha }} .
+
+  semgrep-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      # ponytail: the action checks out the repo itself
+      - name: Semgrep scan
+        uses: iosifache/semgrep-rules-manager@v0.4.0
+
+  build:
+    needs: [docker-build, semgrep-scan]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Push to Docker Hub (mock)
+        run: echo "push to dockerhub"
+
+  gitops:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commit to GitOps repo (mock)
+        run: echo "commit to gitops repo"
