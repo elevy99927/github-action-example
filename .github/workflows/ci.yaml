@@ -23,9 +23,24 @@ jobs:
       contents: read
       security-events: write
     steps:
-      # ponytail: the action checks out the repo itself
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # ponytail: same steps as iosifache/semgrep-rules-manager@v0.4.0, which still uses deprecated checkout@v3 and codeql-action@v2
       - name: Semgrep scan
-        uses: iosifache/semgrep-rules-manager@v0.4.0
+        run: |
+          pip install semgrep semgrep-rules-manager
+          mkdir -p /tmp/rules
+          semgrep-rules-manager --dir /tmp/rules download
+          semgrep ci --sarif --output=semgrep.sarif
+        env:
+          SEMGREP_RULES: /tmp/rules
+
+      - name: Upload results to code scanning
+        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: semgrep.sarif
 
   build:
     needs: [docker-build, semgrep-scan]
