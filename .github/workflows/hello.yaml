@@ -1,17 +1,15 @@
-name: hello-actions
+name: marketplace-hello-world
 
 on:
   push:
-    branches:
-      - dev
+  workflow_dispatch:
 
 jobs:
-  hello:
+  hello-world:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Print hello
-        run: echo "Hello GitHub Actions"
-
-      - name: Print commit sha
-        run: echo $GITHUB_SHA
+      - name: Run Hello World JS Action
+        uses: actions/hello-world-javascript-action@main
+        with:
+          who-to-greet: "GitHub Actions Student"
