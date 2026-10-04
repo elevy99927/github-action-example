@@ -21,4 +21,5 @@ COPY app.py .
 LABEL VERSION=${VERSION}
 
 EXPOSE 8000
+USER nobody
 CMD ["python3", "app.py"]

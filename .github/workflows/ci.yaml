@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - semgrep
+      - full-gitops-example
   workflow_dispatch:
 
 jobs:
-  # docker-build and semgrep-scan run in parallel
+  # Stage 1 - parallel build and scans, 30 minutes each
   docker-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -19,6 +21,7 @@ jobs:
 
   semgrep-scan:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: read
       security-events: write
@@ -50,16 +53,81 @@ jobs:
       #     name: semgrep-report
       #     path: semgrep.sarif
 
-  build:
-    needs: [docker-build, semgrep-scan]
+  trivy-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Pinned to a commit SHA: trivy-action tags were hijacked in a 2026 supply-chain attack
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          scan-type: fs
+          scanners: vuln,secret,misconfig
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+          version: v0.75.0
+
+  bandit-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # ponytail: B311 skipped - random only fakes metric values, nothing cryptographic
+      - name: Bandit scan
+        run: |
+          pip install bandit
+          bandit -r . -s B311
+
+  sonarqube:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # Mock: a real scan needs a SonarQube server and a SONAR_TOKEN secret
+      - name: SonarQube scan (mock)
+        run: echo "sonarqube scan"
+
+  # Stage 2 - parallel, after all of stage 1 passes
+  docker-push:
+    needs: [docker-build, semgrep-scan, trivy-scan, bandit-scan, sonarqube]
     runs-on: ubuntu-latest
     steps:
       - name: Push to Docker Hub (mock)
         run: echo "push to dockerhub"
 
-  gitops:
-    needs: build
+  unit-test:
+    needs: [docker-build, semgrep-scan, trivy-scan, bandit-scan, sonarqube]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Unit test
+        run: |
+          pip install -r requirements.txt
+          python -m unittest -v
+
+  deploy:
+    needs: [docker-push, unit-test]
     runs-on: ubuntu-latest
     steps:
       - name: Commit to GitOps repo (mock)
         run: echo "commit to gitops repo"
+
+  test:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test deployment (mock)
+        run: echo "test deployed app"
+
+  post-install:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post install (mock)
+        run: echo "post install"

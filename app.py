@@ -185,4 +185,5 @@ if __name__ == '__main__':
     print("Starting server on port 8000...")
     print("App info at http://localhost:8000/")
     print("Metrics at http://localhost:8000/metrics")
-    app.run(host='0.0.0.0', port=8000)
+    # Must listen on all interfaces inside the container
+    app.run(host='0.0.0.0', port=8000)  # nosec B104
