@@ -29,15 +29,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      # ponytail: same steps as iosifache/semgrep-rules-manager@v0.4.0, which still uses deprecated checkout@v3 and codeql-action@v2
       - name: Semgrep scan
         run: |
-          pip install semgrep semgrep-rules-manager
-          mkdir -p /tmp/rules
-          semgrep-rules-manager --dir /tmp/rules download
-          semgrep ci --sarif --output=semgrep.sarif
-        env:
-          SEMGREP_RULES: /tmp/rules
+          pip install semgrep
+          semgrep scan --config p/default --sarif --output=semgrep.sarif --error
+        # env:
+        #   SEMGREP_RULES: /tmp/rules
 
       - name: Upload results to code scanning
         if: always()
